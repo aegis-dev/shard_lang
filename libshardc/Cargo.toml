@@ -1,0 +1,10 @@
+[package]
+name = "libshardc"
+version = "0.1.0"
+authors = ["Egidijus Lileika <lileikaa@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+shard_core = { path = "../shard_core" }

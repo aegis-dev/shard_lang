@@ -1,0 +1,7 @@
+[workspace]
+members = [
+    "shard_core",
+    "shard_vm",
+    "libshardc",
+    "shardc"
+]
