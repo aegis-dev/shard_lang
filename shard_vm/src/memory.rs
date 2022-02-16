@@ -23,4 +23,5 @@ pub trait Memory {
 
     fn stack_start_address(&self) -> u16;
     fn dump_memory(&self) -> Vec<u8>;
+    fn dump_memory_range(&self, start: u16, end: u16) -> Vec<u8>;
 }

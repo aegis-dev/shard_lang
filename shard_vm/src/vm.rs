@@ -29,9 +29,10 @@ pub struct VM {
     rlb: u8,
 }
 
-enum ExecutionStatus {
+pub enum ExecutionStatus {
     Ok,
-    Interrupt
+    Interrupt,
+    SysCall
 }
 
 impl VM {
@@ -41,6 +42,10 @@ impl VM {
 
     pub fn peek_memory(&self, address: u16) -> Result<u8, String> {
         self.memory.read_u8(address)
+    }
+
+    pub fn dump_memory_range(&self, start: u16, end: u16) -> Vec<u8> {
+        self.memory.dump_memory_range(start, end)
     }
 
     pub fn dump_memory(&self) -> Vec<u8> {
@@ -62,18 +67,21 @@ impl VM {
         self.rlb = 0x00;
     }
 
-    pub fn execute(&mut self) -> Result<(), String> {
+    pub fn execute(&mut self, sys_call_handler: fn(&mut VM)) -> Result<(), String> {
         self.reset();
-        self.continue_execution()
+        self.continue_execution(sys_call_handler)
     }
 
-    pub fn continue_execution(&mut self) -> Result<(), String> {
+    pub fn continue_execution(&mut self, sys_call_handler: fn(&mut VM)) -> Result<(), String> {
         loop {
             match self.execute_instruction() {
                 Ok(status) => {
                     match status {
                         ExecutionStatus::Ok => continue,
-                        ExecutionStatus::Interrupt => return Ok(())
+                        ExecutionStatus::Interrupt => return Ok(()),
+                        ExecutionStatus::SysCall => {
+                            sys_call_handler(self);
+                        }
                     }
                 }
                 Err(_) => {}
@@ -81,7 +89,7 @@ impl VM {
         }
     }
 
-    fn execute_instruction(&mut self) -> Result<ExecutionStatus, String> {
+    pub fn execute_instruction(&mut self) -> Result<ExecutionStatus, String> {
         let opcode_byte = match self.memory.read_u8(self.pc) {
             Ok(opcode_byte) => opcode_byte,
             Err(err) => return Err(err)
@@ -97,7 +105,13 @@ impl VM {
         self.pc = self.pc.wrapping_add(1);
 
         match opcode {
-            Opcode::Nop => { }
+            Opcode::Interrupt => {
+                // Push return address
+                self.stack_push((self.pc & 0x00ff) as u8)?;
+                self.stack_push((self.pc >> 8) as u8)?;
+
+                return Ok(ExecutionStatus::Interrupt);
+            }
             Opcode::Return | Opcode::JumpC => {
                 let address = self.address_from_stack()?;
                 self.pc = address;
@@ -121,12 +135,9 @@ impl VM {
             Opcode::Pop => {
                 self.stack_pop()?;
             }
-            Opcode::Interrupt => {
-                // Push return address
-                self.stack_push((self.pc & 0x00ff) as u8)?;
-                self.stack_push((self.pc >> 8) as u8)?;
-
-                return Ok(ExecutionStatus::Interrupt);
+            Opcode::Nop => { }
+            Opcode::Sys => {
+                return Ok(ExecutionStatus::SysCall);
             }
             Opcode::StackGet => {
                 let offset = self.operand_value()?;
@@ -350,7 +361,7 @@ impl VM {
     }
 
     #[inline(always)]
-    fn stack_push(&mut self, value: u8) -> Result<(), String> {
+    pub fn stack_push(&mut self, value: u8) -> Result<(), String> {
         if self.sp <= 0 {
             return Err(String::from("Stack overflow"));
         }
@@ -363,7 +374,7 @@ impl VM {
     }
 
     #[inline(always)]
-    fn stack_pop(&mut self) -> Result<u8, String> {
+    pub fn stack_pop(&mut self) -> Result<u8, String> {
         if self.sp >= 0xff {
             return Err(String::from("Stack is full"));
         }

@@ -31,6 +31,7 @@ pub enum Opcode {
     Pop = 0x06,
     Label = 0x07, // pseudo opcode / jump target
     Nop = 0x08,
+    Sys = 0x09,
     StackGet = 0x10,
     StackSet = 0x11,
     RegMsbGet = 0x12,
@@ -83,6 +84,7 @@ impl Opcode {
             "pop" => Some(Opcode::Pop),
             "label" => Some(Opcode::Label),
             "nop" => Some(Opcode::Nop),
+            "sys" => Some(Opcode::Sys),
             "stack.get" => Some(Opcode::StackGet),
             "stack.set" => Some(Opcode::StackSet),
             "rmb.get" => Some(Opcode::RegMsbGet),
@@ -127,7 +129,7 @@ impl Opcode {
 
     pub fn to_string(&self) ->  &'static str {
         return match self {
-            Opcode::Nop => "nop",
+            Opcode::Interrupt => "itrpt",
             Opcode::Return => "return",
             Opcode::Call => "call",
             Opcode::Jump => "jump",
@@ -135,7 +137,8 @@ impl Opcode {
             Opcode::Push => "push",
             Opcode::Pop => "pop",
             Opcode::Label => "label",
-            Opcode::Interrupt => "itrpt",
+            Opcode::Nop => "nop",
+            Opcode::Sys => "sys",
             Opcode::StackGet => "stack.get",
             Opcode::StackSet => "stack.set",
             Opcode::RegMsbGet => "rmb.get",
@@ -183,6 +186,7 @@ impl Opcode {
             Opcode::Nop => true,
             Opcode::Return => true,
             Opcode::Interrupt => true,
+            Opcode::Sys => true,
             Opcode::JumpC => true,
             Opcode::Pop => true,
             Opcode::RegMsbGet => true,
