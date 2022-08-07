@@ -52,6 +52,10 @@ impl VM {
         self.memory.dump_memory()
     }
 
+    pub fn get_memory_mut(&mut self) -> &mut dyn Memory {
+        self.memory.as_mut()
+    }
+
     pub fn get_rlb(&self) -> u8 {
         self.rlb
     }
@@ -147,25 +151,53 @@ impl VM {
                 let offset = self.operand_value()?;
                 self.stack_set(offset)?;
             }
-            Opcode::Load => {
+            Opcode::Load8 => {
                 let address = self.operand_address()?;
                 let value = self.memory.read_u8(address)?;
                 self.stack_push(value)?;
             }
-            Opcode::LoadC => {
+            Opcode::Load8C => {
                 let address = self.address_from_stack()?;
                 let value = self.memory.read_u8(address)?;
                 self.stack_push(value)?;
             }
-            Opcode::Store => {
+            Opcode::Load16 => {
+                let address = self.operand_address()?;
+                let msb = self.memory.read_u8(address)?;
+                let lsb = self.memory.read_u8(address + 1)?;
+                self.stack_push(lsb)?;
+                self.stack_push(msb)?;
+            }
+            Opcode::Load16C => {
+                let address = self.address_from_stack()?;
+                let msb = self.memory.read_u8(address)?;
+                let lsb = self.memory.read_u8(address + 1)?;
+                self.stack_push(lsb)?;
+                self.stack_push(msb)?;
+            }
+            Opcode::Store8 => {
                 let address = self.operand_address()?;
                 let value = self.stack_pop()?;
                 self.memory.write_u8(address, value)?;
             }
-            Opcode::StoreC => {
+            Opcode::Store8C => {
                 let address = self.address_from_stack()?;
                 let value = self.stack_pop()?;
                 self.memory.write_u8(address, value)?;
+            }
+            Opcode::Store16 => {
+                let address = self.operand_address()?;
+                let msb = self.stack_pop()?;
+                let lsb = self.stack_pop()?;
+                self.memory.write_u8(address, msb)?;
+                self.memory.write_u8(address + 1, lsb)?;
+            }
+            Opcode::Store16C => {
+                let address = self.address_from_stack()?;
+                let msb = self.stack_pop()?;
+                let lsb = self.stack_pop()?;
+                self.memory.write_u8(address, msb)?;
+                self.memory.write_u8(address + 1, lsb)?;
             }
             Opcode::Eqz => {
                 let value = self.stack_pop()?;

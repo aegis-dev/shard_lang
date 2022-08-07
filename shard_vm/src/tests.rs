@@ -162,11 +162,11 @@ fn execution_tests() {
         let code = libshardc::compile_from_asm(
             vec![
                 String::from("  push 0xff"),
-                String::from("  store 0xaaaa"),
+                String::from("  store8 0xaaaa"),
                 String::from("  call test"),
                 String::from("  itrpt"),
                 String::from("test:"),
-                String::from("  load 0xaaaa"),
+                String::from("  load8 0xaaaa"),
                 String::from("  rlb.set"),
                 String::from("  return"),
             ]
@@ -184,13 +184,13 @@ fn execution_tests() {
                 String::from("  push 0xff"),
                 String::from("  push 0xaa"),
                 String::from("  push 0xaa"),
-                String::from("  store_c"),
+                String::from("  store8_c"),
                 String::from("  call test"),
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xaa"),
                 String::from("  push 0xaa"),
-                String::from("  load_c"),
+                String::from("  load8_c"),
                 String::from("  rlb.set"),
                 String::from("  return"),
             ]

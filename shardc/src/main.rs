@@ -26,10 +26,24 @@ use std::io::{BufRead, Write};
 use std::path::Path;
 use std::collections::{HashSet, HashMap};
 
+
+fn print_help() {
+    println!("libshardc [source_file]");
+    println!("libshardc --help");
+}
+
 fn main() {
     let args: Vec<String> = env::args().collect();
     if args.len() < 2 {
-        println!("libshardc [source_file]");
+        print_help();
+        return;
+    }
+
+    if args[1] == "--help" {
+        print_help();
+        return;
+    } else if args[1].starts_with("-") {
+        print_help();
         return;
     }
 
