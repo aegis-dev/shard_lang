@@ -8,4 +8,4 @@ edition = "2018"
 
 [dependencies]
 shard_core = { path = "../shard_core" }
-libshardc = { path = "../libshardc" }
+lib_shardc = { path = "../lib_shardc" }

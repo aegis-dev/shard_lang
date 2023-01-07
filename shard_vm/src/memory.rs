@@ -25,6 +25,7 @@ pub trait Memory {
 
     fn stack_start_address(&self) -> u16;
     fn call_stack_start_address(&self) -> u16;
+    fn ram_start_address(&self) -> u16;
 
     fn dump_memory(&self) -> Vec<u8>;
     fn dump_memory_range(&self, start: u16, end: u16) -> Vec<u8>;
@@ -85,6 +86,10 @@ impl Memory for DefaultMemory {
 
     fn call_stack_start_address(&self) -> u16 {
         self.call_stack_start_address
+    }
+
+    fn ram_start_address(&self) -> u16 {
+        self.ram_start_address
     }
 
     fn dump_memory(&self) -> Vec<u8> {

@@ -1,5 +1,5 @@
 [package]
-name = "libshardc"
+name = "lib_shardc"
 version = "0.1.0"
 authors = ["Egidijus Lileika <lileikaa@gmail.com>"]
 edition = "2018"

@@ -3,7 +3,7 @@
 version = 3
 
 [[package]]
-name = "libshardc"
+name = "lib_shardc"
 version = "0.1.0"
 dependencies = [
  "shard_core",
@@ -75,7 +75,7 @@ dependencies = [
 name = "shard_vm"
 version = "0.1.0"
 dependencies = [
- "libshardc",
+ "lib_shardc",
  "shard_core",
 ]
 
@@ -83,7 +83,7 @@ dependencies = [
 name = "shardc"
 version = "0.1.0"
 dependencies = [
- "libshardc",
+ "lib_shardc",
 ]
 
 [[package]]

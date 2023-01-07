@@ -19,12 +19,12 @@
 
 use crate::vm::VM;
 
-fn sys_call_handler(vm: &mut VM) { }
+fn sys_call_handler(_vm: &mut VM) { }
 
 #[test]
 fn execution_tests() {
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  nop"),
             ]
@@ -34,7 +34,7 @@ fn execution_tests() {
         vm.execute(sys_call_handler).unwrap();
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  call test"),
                 String::from("  itrpt"),
@@ -51,7 +51,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  jump test"),
                 String::from("test:"),
@@ -67,7 +67,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x04"),
                 String::from("  jump_c"),
@@ -83,7 +83,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xff"),
                 String::from("  store8 0xaaaa"),
@@ -102,7 +102,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xff"),
                 String::from("  push 0xaa"),
@@ -125,7 +125,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  eqz test"),
@@ -143,7 +143,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xaa"),
                 String::from("  push 0xaa"),
@@ -162,7 +162,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xaf"),
                 String::from("  push 0xaa"),
@@ -181,7 +181,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  push 0x01"),
@@ -200,7 +200,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xf0"),
                 String::from("  push 0xff"),
@@ -219,7 +219,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xf0"),
                 String::from("  push 0x0"),
@@ -238,7 +238,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xf0"),
                 String::from("  push 0x0"),
@@ -257,7 +257,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x00);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x00"),
@@ -276,7 +276,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
@@ -295,7 +295,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x00);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  push 0xf0"),
@@ -314,7 +314,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x00"),
@@ -333,7 +333,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  push 0xf0"),
@@ -352,7 +352,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x00);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
@@ -371,7 +371,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x02"),
                 String::from("  push 0x01"),
@@ -390,7 +390,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x00);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  push 0xf0"),
@@ -409,7 +409,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x00);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
@@ -428,7 +428,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  push 0xf0"),
@@ -449,7 +449,7 @@ fn execution_tests() {
 
     //
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
@@ -468,7 +468,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x02"),
                 String::from("  push 0x01"),
@@ -487,7 +487,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  push 0xf0"),
@@ -506,7 +506,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
@@ -525,7 +525,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xff);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x00"),
                 String::from("  push 0xf0"),
@@ -544,7 +544,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x00);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x02"),
                 String::from("  push 0x01"),
@@ -560,7 +560,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x03);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x02"),
                 String::from("  push 0x01"),
@@ -576,7 +576,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x01);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x02"),
                 String::from("  push 0x02"),
@@ -592,7 +592,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x04);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x04"),
                 String::from("  push 0x02"),
@@ -608,7 +608,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x02);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xC8"),
                 String::from("  push 0x02"),
@@ -624,7 +624,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x64);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x04"),
                 String::from("  push 0x03"),
@@ -640,7 +640,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x01);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xff"),
                 String::from("  push 0xfe"),
@@ -656,7 +656,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x01);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x02"),
                 String::from("  push 0x02"),
@@ -672,7 +672,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x04);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xff"),
                 String::from("  abs"),
@@ -687,7 +687,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x01);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x03"),
                 String::from("  push 0x02"),
@@ -703,7 +703,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x02);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x03"),
                 String::from("  push 0x02"),
@@ -719,7 +719,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x03);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xaa"),
                 String::from("  push 0x56"),
@@ -735,7 +735,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xfc);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
@@ -751,7 +751,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x02);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xf0"),
                 String::from("  push 0x01"),
@@ -767,7 +767,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xf8);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xf0"),
                 String::from("  push 0x01"),
@@ -783,7 +783,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0x78);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0xf0"),
                 String::from("  push 0x01"),
@@ -799,7 +799,7 @@ fn execution_tests() {
         assert_eq!(vm.get_rlb(), 0xe1);
     }
     {
-        let code = libshardc::compile_from_asm(
+        let code = lib_shardc::compile_from_asm(
             vec![
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),

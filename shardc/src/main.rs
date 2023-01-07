@@ -28,8 +28,8 @@ use std::collections::{HashSet, HashMap};
 
 
 fn print_help() {
-    println!("libshardc [source_file]");
-    println!("libshardc --help");
+    println!("shardc [source_file]");
+    println!("shardc --help");
 }
 
 fn main() {
@@ -60,7 +60,7 @@ fn main() {
         }
     };
 
-    let bin = match libshardc::compile_from_asm(lines) {
+    let bin = match lib_shardc::compile_from_asm(lines) {
         Ok(bin) => bin,
         Err(err) => {
             println!("{}", err);
