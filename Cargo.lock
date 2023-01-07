@@ -87,6 +87,14 @@ dependencies = [
 ]
 
 [[package]]
+name = "shardclr"
+version = "0.1.0"
+dependencies = [
+ "num_enum",
+ "shard_vm",
+]
+
+[[package]]
 name = "syn"
 version = "1.0.76"
 source = "registry+https://github.com/rust-lang/crates.io-index"

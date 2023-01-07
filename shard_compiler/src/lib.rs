@@ -95,7 +95,7 @@ pub fn parse_asm_line(context: &mut Context, line: &str, line_number: usize) -> 
 
                     match opcode {
                         // label / u16
-                        Opcode::Call | Opcode::Jump |
+                        Opcode::Call | Opcode::Jump | Opcode::PushAddr |
                         Opcode::Load8 | Opcode::Load16 | Opcode::Store8 | Opcode::Store16 |
                         Opcode::Eqz | Opcode::Eq | Opcode::Ne | Opcode::LtS | Opcode::LtU |
                         Opcode::GtS | Opcode::GtU | Opcode::LeS | Opcode::LeU |

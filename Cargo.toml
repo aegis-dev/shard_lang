@@ -3,5 +3,6 @@ members = [
     "shard_core",
     "shard_vm",
     "shard_compiler",
-    "shardc"
+    "shardc",
+    "shardclr"
 ]

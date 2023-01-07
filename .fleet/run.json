@@ -8,6 +8,10 @@
                 "RUST_BACKTRACE": "1"
             },
         },
-
+        {
+            "type": "cargo",
+            "name": "build",
+            "cargoArgs": ["build", "--release"]
+        },
     ]
 }

@@ -1,0 +1,19 @@
+
+hello_world: 0x48 0x65 0x6c 0x6c 0x6f 0x20 0x77 0x6f 0x72 0x6c 0x64 0x21 0x00
+
+main:
+    push 0x00               ; output_index - at the moment 0 is stdout
+    push_addr hello_world   ; data_address
+    push 0x0d               ; size = 13
+    call write
+    itrpt
+
+; params:
+;   output_index
+;   data_address
+;   size
+write:
+    push 0x01
+    sys
+    return
+

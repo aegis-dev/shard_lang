@@ -40,7 +40,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -56,7 +56,7 @@ fn execution_tests() {
                 String::from("  jump test"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -72,7 +72,7 @@ fn execution_tests() {
                 String::from("  push 0x04"),
                 String::from("  jump_c"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -91,7 +91,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  load8 0xaaaa"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -114,7 +114,7 @@ fn execution_tests() {
                 String::from("  push 0xaa"),
                 String::from("  push 0xaa"),
                 String::from("  load8_c"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -132,7 +132,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -151,7 +151,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -170,7 +170,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -189,7 +189,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -208,7 +208,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -227,7 +227,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -246,7 +246,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -265,7 +265,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -284,7 +284,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -303,7 +303,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -322,7 +322,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -341,7 +341,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -360,7 +360,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -379,7 +379,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -398,7 +398,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -417,7 +417,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -436,7 +436,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -457,7 +457,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -476,7 +476,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -495,7 +495,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -514,7 +514,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -533,7 +533,7 @@ fn execution_tests() {
                 String::from("  itrpt"),
                 String::from("test:"),
                 String::from("  push 0xff"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  return"),
             ]
         ).unwrap();
@@ -549,7 +549,7 @@ fn execution_tests() {
                 String::from("  push 0x02"),
                 String::from("  push 0x01"),
                 String::from("  add"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -565,7 +565,7 @@ fn execution_tests() {
                 String::from("  push 0x02"),
                 String::from("  push 0x01"),
                 String::from("  sub"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -581,7 +581,7 @@ fn execution_tests() {
                 String::from("  push 0x02"),
                 String::from("  push 0x02"),
                 String::from("  mul"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -597,7 +597,7 @@ fn execution_tests() {
                 String::from("  push 0x04"),
                 String::from("  push 0x02"),
                 String::from("  div_s"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -613,7 +613,7 @@ fn execution_tests() {
                 String::from("  push 0xC8"),
                 String::from("  push 0x02"),
                 String::from("  div_u"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -629,7 +629,7 @@ fn execution_tests() {
                 String::from("  push 0x04"),
                 String::from("  push 0x03"),
                 String::from("  rem_s"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -645,7 +645,7 @@ fn execution_tests() {
                 String::from("  push 0xff"),
                 String::from("  push 0xfe"),
                 String::from("  div_u"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -661,7 +661,7 @@ fn execution_tests() {
                 String::from("  push 0x02"),
                 String::from("  push 0x02"),
                 String::from("  pow"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -676,7 +676,7 @@ fn execution_tests() {
             vec![
                 String::from("  push 0xff"),
                 String::from("  abs"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -692,7 +692,7 @@ fn execution_tests() {
                 String::from("  push 0x03"),
                 String::from("  push 0x02"),
                 String::from("  and"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -708,7 +708,7 @@ fn execution_tests() {
                 String::from("  push 0x03"),
                 String::from("  push 0x02"),
                 String::from("  or"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -724,7 +724,7 @@ fn execution_tests() {
                 String::from("  push 0xaa"),
                 String::from("  push 0x56"),
                 String::from("  xor"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -740,7 +740,7 @@ fn execution_tests() {
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
                 String::from("  shl"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -756,7 +756,7 @@ fn execution_tests() {
                 String::from("  push 0xf0"),
                 String::from("  push 0x01"),
                 String::from("  shr_s"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -772,7 +772,7 @@ fn execution_tests() {
                 String::from("  push 0xf0"),
                 String::from("  push 0x01"),
                 String::from("  shr_u"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -788,7 +788,7 @@ fn execution_tests() {
                 String::from("  push 0xf0"),
                 String::from("  push 0x01"),
                 String::from("  rotl"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();
@@ -804,7 +804,7 @@ fn execution_tests() {
                 String::from("  push 0x01"),
                 String::from("  push 0x01"),
                 String::from("  rotr"),
-                String::from("  rlb.set"),
+                String::from("  rlb_set"),
                 String::from("  itrpt"),
             ]
         ).unwrap();

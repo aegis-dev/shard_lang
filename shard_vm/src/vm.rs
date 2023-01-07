@@ -125,21 +125,21 @@ impl VM {
         match opcode {
             Opcode::Interrupt => {
                 // Push return address
-                self.push_address_to_call_stack(self.pc)?;
+                self.call_stack_push_address(self.pc)?;
                 return Ok(ExecutionStatus::Interrupt);
             }
             Opcode::Return => {
-                let address = self.address_from_call_stack()?;
+                let address = self.call_stack_pop_address()?;
                 self.pc = address;
             }
             Opcode::JumpC => {
-                let address = self.address_from_stack()?;
+                let address = self.stack_pop_address()?;
                 self.pc = address;
             }
             Opcode::Call => {
                 let address = self.operand_address()?;
                 // Push return address
-                self.push_address_to_call_stack(self.pc)?;
+                self.call_stack_push_address(self.pc)?;
                 self.pc = address;
             }
             Opcode::Jump => {
@@ -149,6 +149,10 @@ impl VM {
             Opcode::Push => {
                 let value = self.operand_value()?;
                 self.stack_push(value)?;
+            }
+            Opcode::PushAddr => {
+                let address = self.operand_address()?;
+                self.stack_push_address(address)?;
             }
             Opcode::Pop => {
                 self.stack_pop()?;
@@ -171,7 +175,7 @@ impl VM {
                 self.stack_push(value)?;
             }
             Opcode::Load8C => {
-                let address = self.address_from_stack()?;
+                let address = self.stack_pop_address()?;
                 let value = self.memory.read_u8(address)?;
                 self.stack_push(value)?;
             }
@@ -183,7 +187,7 @@ impl VM {
                 self.stack_push(msb)?;
             }
             Opcode::Load16C => {
-                let address = self.address_from_stack()?;
+                let address = self.stack_pop_address()?;
                 let msb = self.memory.read_u8(address)?;
                 let lsb = self.memory.read_u8(address + 1)?;
                 self.stack_push(lsb)?;
@@ -195,7 +199,7 @@ impl VM {
                 self.memory.write_u8(address, value)?;
             }
             Opcode::Store8C => {
-                let address = self.address_from_stack()?;
+                let address = self.stack_pop_address()?;
                 let value = self.stack_pop()?;
                 self.memory.write_u8(address, value)?;
             }
@@ -207,7 +211,7 @@ impl VM {
                 self.memory.write_u8(address + 1, lsb)?;
             }
             Opcode::Store16C => {
-                let address = self.address_from_stack()?;
+                let address = self.stack_pop_address()?;
                 let msb = self.stack_pop()?;
                 let lsb = self.stack_pop()?;
                 self.memory.write_u8(address, msb)?;
@@ -455,7 +459,7 @@ impl VM {
     }
 
     #[inline(always)]
-    fn stack_peek(&mut self, offset: u8) -> Result<(), String> {
+    pub fn stack_peek(&mut self, offset: u8) -> Result<(), String> {
         let stack_offset = self.sp as u16 + offset as u16;
         if stack_offset > 0xff {
             return Err(String::from("Stack offset out of range"));
@@ -470,7 +474,7 @@ impl VM {
     }
 
     #[inline(always)]
-    fn stack_set(&mut self, offset: u8) -> Result<(), String> {
+    pub fn stack_set(&mut self, offset: u8) -> Result<(), String> {
         let stack_offset = self.sp as u16 + offset as u16;
         if stack_offset > 0xff {
             return Err(String::from("Stack offset out of range"));
@@ -509,23 +513,31 @@ impl VM {
     }
 
     #[inline(always)]
-    fn address_from_stack(&mut self) -> Result<u16, String> {
+    pub fn stack_push_address(&mut self, address: u16) -> Result<(), String> {
+        self.stack_push((address & 0x00ff) as u8)?;
+        self.stack_push((address >> 8) as u8)?;
+        Ok(())
+    }
+
+    #[inline(always)]
+    pub fn stack_pop_address(&mut self) -> Result<u16, String> {
         let msb = self.stack_pop()?;
         let lsb = self.stack_pop()?;
         Ok(VM::address_from_bytes(msb, lsb))
     }
 
     #[inline(always)]
-    fn address_from_call_stack(&mut self) -> Result<u16, String> {
+    pub fn call_stack_push_address(&mut self, address: u16) -> Result<(), String> {
+        self.call_stack_push((address & 0x00ff) as u8)?;
+        self.call_stack_push((address >> 8) as u8)?;
+        Ok(())
+    }
+
+    #[inline(always)]
+    pub fn call_stack_pop_address(&mut self) -> Result<u16, String> {
         let msb = self.call_stack_pop()?;
         let lsb = self.call_stack_pop()?;
         Ok(VM::address_from_bytes(msb, lsb))
     }
 
-    #[inline(always)]
-    fn push_address_to_call_stack(&mut self, address: u16) -> Result<(), String> {
-        self.call_stack_push((address & 0x00ff) as u8)?;
-        self.call_stack_push((address >> 8) as u8)?;
-        Ok(())
-    }
 }
