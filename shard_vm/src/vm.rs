@@ -21,9 +21,17 @@ use std::convert::TryFrom;
 use shard_core::opcodes::Opcode;
 use crate::memory::Memory;
 
+pub const VM_ADDRESS_SIZE: usize = 2;
+pub const VM_OPERAND_SIZE: usize = 1;
+pub const VM_VALUE_SIZE: usize = VM_OPERAND_SIZE;
+pub const VM_STACK_SIZE: usize = u8::MAX as usize + 1;
+pub const VM_CALL_STACK_SIZE: usize = (u8::MAX as usize + 1) * 2;
+pub const VM_MAX_IMAGE_SIZE: usize = u16::MAX as usize + 1;
+
 pub struct VM {
     memory: Box<dyn Memory>,
     sp: u8,
+    csp: u8,
     pc: u16,
     rmb: u8,
     rlb: u8,
@@ -37,7 +45,7 @@ pub enum ExecutionStatus {
 
 impl VM {
     pub fn new(memory: Box<dyn Memory>) -> VM {
-        VM { sp: 0xff, pc: 0x00, rmb: 0x00, rlb: 0x00, memory }
+        VM { sp: 0xff, csp: 0xff, pc: 0x00, rmb: 0x00, rlb: 0x00, memory }
     }
 
     pub fn peek_memory(&self, address: u16) -> Result<u8, String> {
@@ -66,6 +74,7 @@ impl VM {
 
     pub fn reset(&mut self) {
         self.sp = 0xff;
+        self.csp = 0xff;
         self.pc = 0x00;
         self.rmb = 0x00;
         self.rlb = 0x00;
@@ -111,21 +120,21 @@ impl VM {
         match opcode {
             Opcode::Interrupt => {
                 // Push return address
-                self.stack_push((self.pc & 0x00ff) as u8)?;
-                self.stack_push((self.pc >> 8) as u8)?;
-
+                self.push_address_to_call_stack(self.pc)?;
                 return Ok(ExecutionStatus::Interrupt);
             }
-            Opcode::Return | Opcode::JumpC => {
+            Opcode::Return => {
+                let address = self.address_from_call_stack()?;
+                self.pc = address;
+            }
+            Opcode::JumpC => {
                 let address = self.address_from_stack()?;
                 self.pc = address;
             }
             Opcode::Call => {
                 let address = self.operand_address()?;
                 // Push return address
-                self.stack_push((self.pc & 0x00ff) as u8)?;
-                self.stack_push((self.pc >> 8) as u8)?;
-
+                self.push_address_to_call_stack(self.pc)?;
                 self.pc = address;
             }
             Opcode::Jump => {
@@ -408,11 +417,35 @@ impl VM {
     #[inline(always)]
     pub fn stack_pop(&mut self) -> Result<u8, String> {
         if self.sp >= 0xff {
-            return Err(String::from("Stack is full"));
+            return Err(String::from("Stack is empty"));
         }
         self.sp = self.sp.wrapping_add(1);
         let address = self.memory.stack_start_address().wrapping_add(self.sp as u16);
         assert!(address >= self.memory.stack_start_address());
+        self.memory.read_u8(address)
+    }
+
+    #[inline(always)]
+    pub fn call_stack_push(&mut self, value: u8) -> Result<(), String> {
+        if self.csp <= 0 {
+            return Err(String::from("Call stack overflow"));
+        }
+
+        let address = self.memory.call_stack_start_address().wrapping_add(self.csp as u16);
+        assert!(address >= self.memory.call_stack_start_address());
+        self.csp = self.csp.wrapping_sub(1);
+        self.memory.write_u8(address, value)?;
+        Ok(())
+    }
+
+    #[inline(always)]
+    pub fn call_stack_pop(&mut self) -> Result<u8, String> {
+        if self.csp >= 0xff {
+            return Err(String::from("Call stack is empty"));
+        }
+        self.csp = self.csp.wrapping_add(1);
+        let address = self.memory.call_stack_start_address().wrapping_add(self.csp as u16);
+        assert!(address >= self.memory.call_stack_start_address());
         self.memory.read_u8(address)
     }
 
@@ -477,5 +510,17 @@ impl VM {
         Ok(VM::address_from_bytes(msb, lsb))
     }
 
+    #[inline(always)]
+    fn address_from_call_stack(&mut self) -> Result<u16, String> {
+        let msb = self.call_stack_pop()?;
+        let lsb = self.call_stack_pop()?;
+        Ok(VM::address_from_bytes(msb, lsb))
+    }
 
+    #[inline(always)]
+    fn push_address_to_call_stack(&mut self, address: u16) -> Result<(), String> {
+        self.call_stack_push((address & 0x00ff) as u8)?;
+        self.call_stack_push((address >> 8) as u8)?;
+        Ok(())
+    }
 }

@@ -18,10 +18,13 @@
 //
 
 use crate::memory::Memory;
-use crate::vm::VM;
+use crate::vm::{VM, VM_STACK_SIZE, VM_CALL_STACK_SIZE, VM_MAX_IMAGE_SIZE};
 
 struct SimpleMemory {
     memory: Vec<u8>,
+    stack_start_address: u16,
+    call_stack_start_address: u16,
+    ram_start_address: u16,
 }
 
 impl SimpleMemory {
@@ -37,11 +40,21 @@ impl SimpleMemory {
         let mut code_temp = code;
         memory.append(&mut code_temp);
 
-        let mut padding = vec![0 as u8; u16::MAX as usize - memory.len()];
-        memory.append(&mut padding);
-        assert_eq!(memory.len(), u16::MAX as usize);
+        let stack_start_address = memory.len() as u16;
+        let mut stack = vec![0 as u8; VM_STACK_SIZE];
+        memory.append(&mut stack);
 
-        Ok(SimpleMemory { memory })
+        let call_stack_start_address = memory.len() as u16;
+        let mut call_stack = vec![0 as u8; VM_CALL_STACK_SIZE];
+        memory.append(&mut call_stack);
+
+        let ram_start_address = memory.len() as u16;
+        let mut ram = vec![0 as u8; VM_MAX_IMAGE_SIZE - memory.len()];
+        memory.append(&mut ram);
+
+        assert_eq!(memory.len(), VM_MAX_IMAGE_SIZE);
+
+        Ok(SimpleMemory { memory, stack_start_address, call_stack_start_address, ram_start_address })
     }
 }
 
@@ -56,9 +69,12 @@ impl Memory for SimpleMemory {
         Ok(value)
     }
 
-    // Stack at the very end
     fn stack_start_address(&self) -> u16 {
-        0xfeff
+        self.stack_start_address
+    }
+
+    fn call_stack_start_address(&self) -> u16 {
+        self.call_stack_start_address
     }
 
     fn dump_memory(&self) -> Vec<u8> {
@@ -136,27 +152,6 @@ fn execution_tests() {
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
-    }
-    {
-        let code = libshardc::compile_from_asm(
-            vec![
-                String::from("  call test"),
-                String::from("  push 0xff"),
-                String::from("  itrpt"),
-                String::from("test:"),
-                String::from("  rmb.set"),
-                String::from("  rlb.set"),
-                String::from("  rlb.get"),
-                String::from("  rmb.get"),
-                String::from("  return"),
-            ]
-        ).unwrap();
-
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
-        vm.execute(sys_call_handler).unwrap();
-
-        assert_eq!(vm.get_rlb(), 0x03);
     }
     {
         let code = libshardc::compile_from_asm(
