@@ -19,7 +19,7 @@
 
 use std::convert::TryFrom;
 use shard_core::opcodes::Opcode;
-use crate::memory::Memory;
+use crate::memory::{Memory, DefaultMemory};
 
 pub const VM_ADDRESS_SIZE: usize = 2;
 pub const VM_OPERAND_SIZE: usize = 1;
@@ -44,7 +44,12 @@ pub enum ExecutionStatus {
 }
 
 impl VM {
-    pub fn new(memory: Box<dyn Memory>) -> VM {
+    pub fn new(code: Vec<u8>) -> Result<VM, String> {
+        let memory = Box::new(DefaultMemory::new(code)?);
+        Ok(VM { sp: 0xff, csp: 0xff, pc: 0x00, rmb: 0x00, rlb: 0x00, memory })
+    }
+
+    pub fn new_with_custom_memory(memory: Box<dyn Memory>) -> VM {
         VM { sp: 0xff, csp: 0xff, pc: 0x00, rmb: 0x00, rlb: 0x00, memory }
     }
 

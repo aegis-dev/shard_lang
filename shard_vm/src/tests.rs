@@ -17,74 +17,7 @@
 // along with shard_lang. If not, see <https://www.gnu.org/licenses/>.
 //
 
-use crate::memory::Memory;
-use crate::vm::{VM, VM_STACK_SIZE, VM_CALL_STACK_SIZE, VM_MAX_IMAGE_SIZE};
-
-struct SimpleMemory {
-    memory: Vec<u8>,
-    stack_start_address: u16,
-    call_stack_start_address: u16,
-    ram_start_address: u16,
-}
-
-impl SimpleMemory {
-    pub fn new(code: Vec<u8>) -> Result<SimpleMemory, String> {
-        if code.len() > u16::MAX as usize {
-            return Err(String::from(format!(
-                "Code size {} exceeding {} limit",
-                code.len(), u16::MAX
-            )));
-        }
-
-        let mut memory = vec![];
-        let mut code_temp = code;
-        memory.append(&mut code_temp);
-
-        let stack_start_address = memory.len() as u16;
-        let mut stack = vec![0 as u8; VM_STACK_SIZE];
-        memory.append(&mut stack);
-
-        let call_stack_start_address = memory.len() as u16;
-        let mut call_stack = vec![0 as u8; VM_CALL_STACK_SIZE];
-        memory.append(&mut call_stack);
-
-        let ram_start_address = memory.len() as u16;
-        let mut ram = vec![0 as u8; VM_MAX_IMAGE_SIZE - memory.len()];
-        memory.append(&mut ram);
-
-        assert_eq!(memory.len(), VM_MAX_IMAGE_SIZE);
-
-        Ok(SimpleMemory { memory, stack_start_address, call_stack_start_address, ram_start_address })
-    }
-}
-
-impl Memory for SimpleMemory {
-    fn write_u8(&mut self, address: u16, value: u8) -> Result<(), String> {
-        self.memory[address as usize] = value;
-        Ok(())
-    }
-
-    fn read_u8(&self, address: u16) -> Result<u8, String> {
-        let value = self.memory[address as usize];
-        Ok(value)
-    }
-
-    fn stack_start_address(&self) -> u16 {
-        self.stack_start_address
-    }
-
-    fn call_stack_start_address(&self) -> u16 {
-        self.call_stack_start_address
-    }
-
-    fn dump_memory(&self) -> Vec<u8> {
-        self.memory.clone()
-    }
-
-    fn dump_memory_range(&self, start: u16, end: u16) -> Vec<u8> {
-        self.memory[start as usize..end as usize].to_vec()
-    }
-}
+use crate::vm::VM;
 
 fn sys_call_handler(vm: &mut VM) { }
 
@@ -97,8 +30,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
     }
     {
@@ -113,8 +45,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -130,8 +61,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -147,8 +77,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -167,8 +96,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -191,8 +119,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -210,8 +137,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -230,8 +156,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -250,8 +175,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -270,8 +194,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -290,8 +213,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -310,8 +232,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -330,8 +251,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x00);
@@ -350,8 +270,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -370,8 +289,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x00);
@@ -390,8 +308,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -410,8 +327,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -430,8 +346,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x00);
@@ -450,8 +365,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -470,8 +384,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x00);
@@ -490,8 +403,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x00);
@@ -510,8 +422,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -530,8 +441,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -552,8 +462,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -572,8 +481,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -592,8 +500,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -612,8 +519,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xff);
@@ -632,8 +538,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x00);
@@ -649,8 +554,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x03);
@@ -666,8 +570,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x01);
@@ -683,8 +586,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x04);
@@ -700,8 +602,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x02);
@@ -717,8 +618,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x64);
@@ -734,8 +634,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x01);
@@ -751,8 +650,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x01);
@@ -768,8 +666,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x04);
@@ -784,8 +681,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x01);
@@ -801,8 +697,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x02);
@@ -818,8 +713,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x03);
@@ -835,8 +729,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xfc);
@@ -852,8 +745,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x02);
@@ -869,8 +761,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xf8);
@@ -886,8 +777,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x78);
@@ -903,8 +793,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0xe1);
@@ -920,8 +809,7 @@ fn execution_tests() {
             ]
         ).unwrap();
 
-        let memory = Box::new(SimpleMemory::new(code).unwrap());
-        let mut vm = VM::new(memory);
+        let mut vm = VM::new(code).unwrap();
         vm.execute(sys_call_handler).unwrap();
 
         assert_eq!(vm.get_rlb(), 0x80);
