@@ -3,13 +3,6 @@
 version = 3
 
 [[package]]
-name = "lib_shardc"
-version = "0.1.0"
-dependencies = [
- "shard_core",
-]
-
-[[package]]
 name = "num_enum"
 version = "0.5.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -65,6 +58,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "f12d06de37cf59146fbdecab66aa99f9fe4f78722e3607577a5375d66bd0c913"
 
 [[package]]
+name = "shard_compiler"
+version = "0.1.0"
+dependencies = [
+ "shard_core",
+]
+
+[[package]]
 name = "shard_core"
 version = "0.1.0"
 dependencies = [
@@ -75,7 +75,7 @@ dependencies = [
 name = "shard_vm"
 version = "0.1.0"
 dependencies = [
- "lib_shardc",
+ "shard_compiler",
  "shard_core",
 ]
 
@@ -83,7 +83,7 @@ dependencies = [
 name = "shardc"
 version = "0.1.0"
 dependencies = [
- "lib_shardc",
+ "shard_compiler",
 ]
 
 [[package]]

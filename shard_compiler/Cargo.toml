@@ -1,5 +1,5 @@
 [package]
-name = "lib_shardc"
+name = "shard_compiler"
 version = "0.1.0"
 authors = ["Egidijus Lileika <lileikaa@gmail.com>"]
 edition = "2018"

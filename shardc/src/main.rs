@@ -60,7 +60,7 @@ fn main() {
         }
     };
 
-    let bin = match lib_shardc::compile_from_asm(lines) {
+    let bin = match shard_compiler::compile_from_asm(lines) {
         Ok(bin) => bin,
         Err(err) => {
             println!("{}", err);

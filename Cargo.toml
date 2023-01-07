@@ -2,6 +2,6 @@
 members = [
     "shard_core",
     "shard_vm",
-    "lib_shardc",
+    "shard_compiler",
     "shardc"
 ]
