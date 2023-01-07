@@ -1,0 +1,13 @@
+{
+    "configurations": [
+        {
+            "type": "cargo",
+            "name": "tests",
+            "cargoArgs": ["test", "--", "--nocapture"],
+            "environment": {
+                "RUST_BACKTRACE": "1"
+            },
+        },
+
+    ]
+}

@@ -31,7 +31,7 @@ fn test_module_import() {
 
         let mut included_modules = HashSet::new();
         let mut standard_modules = HashMap::new();
-        standard_modules.insert(String::from("std/malloc"), String::from(include_str!("../../standard_modules/std/malloc.sha")));
+        standard_modules.insert(String::from("std/malloc"), String::from(include_str!("../../standard_modules/std/malloc.srd")));
 
         let lines = crate::load_module_from_string(&main_module, &module_name, &mock_dir, &mut included_modules, &standard_modules).unwrap();
 
@@ -51,7 +51,7 @@ fn test_module_import() {
 
         let mut included_modules = HashSet::new();
         let mut standard_modules = HashMap::new();
-        standard_modules.insert(String::from("std/malloc"), String::from(include_str!("../../standard_modules/std/malloc.sha")));
+        standard_modules.insert(String::from("std/malloc"), String::from(include_str!("../../standard_modules/std/malloc.srd")));
 
         match crate::load_module_from_string(&main_module, &module_name, &mock_dir, &mut included_modules, &standard_modules) {
             Ok(_) => {

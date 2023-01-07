@@ -50,7 +50,7 @@ fn main() {
     let main_module_name = String::from("main");
     let mut included_modules = HashSet::new();
     let mut standard_modules = HashMap::new();
-    standard_modules.insert(String::from("std/malloc"), String::from(include_str!("../../standard_modules/std/malloc.sha")));
+    standard_modules.insert(String::from("std/malloc"), String::from(include_str!("../../standard_modules/std/malloc.srd")));
 
     let lines = match load_module_from_file(&args[1], &main_module_name, &mut included_modules, &standard_modules) {
         Ok(lines) => lines,
