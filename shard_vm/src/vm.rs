@@ -38,9 +38,9 @@ pub struct VM {
 }
 
 pub enum ExecutionStatus {
-    Ok,
-    Interrupt,
-    SysCall
+    Continue,
+    SysCall,
+    Done
 }
 
 impl VM {
@@ -92,17 +92,12 @@ impl VM {
 
     pub fn continue_execution(&mut self, sys_call_handler: fn(&mut VM)) -> Result<(), String> {
         loop {
-            match self.execute_instruction() {
-                Ok(status) => {
-                    match status {
-                        ExecutionStatus::Ok => continue,
-                        ExecutionStatus::Interrupt => return Ok(()),
-                        ExecutionStatus::SysCall => {
-                            sys_call_handler(self);
-                        }
-                    }
+            match self.execute_instruction()? {
+                ExecutionStatus::Continue => continue,
+                ExecutionStatus::Done => return Ok(()),
+                ExecutionStatus::SysCall => {
+                    sys_call_handler(self);
                 }
-                Err(_) => {}
             }
         }
     }
@@ -123,17 +118,12 @@ impl VM {
         self.pc = self.pc.wrapping_add(1);
 
         match opcode {
-            Opcode::Interrupt => {
-                // Push return address
-                self.call_stack_push_address(self.pc)?;
-                return Ok(ExecutionStatus::Interrupt);
-            }
             Opcode::Return => {
-                let address = self.call_stack_pop_address()?;
-                self.pc = address;
-            }
-            Opcode::JumpC => {
-                let address = self.stack_pop_address()?;
+                let address = match self.call_stack_pop_address() {
+                    Ok(address) => address,
+                    // Call stack is empty - end execution
+                    Err(_) => return Ok(ExecutionStatus::Done),
+                };
                 self.pc = address;
             }
             Opcode::Call => {
@@ -144,6 +134,10 @@ impl VM {
             }
             Opcode::Jump => {
                 let address = self.operand_address()?;
+                self.pc = address;
+            }
+            Opcode::JumpC => {
+                let address = self.stack_pop_address()?;
                 self.pc = address;
             }
             Opcode::Push => {
@@ -407,7 +401,7 @@ impl VM {
             }
         }
 
-        Ok(ExecutionStatus::Ok)
+        Ok(ExecutionStatus::Continue)
     }
 
     #[inline(always)]

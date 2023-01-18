@@ -1,14 +1,15 @@
-
+; "Hello world!\0" string
 hello_world: 0x48 0x65 0x6c 0x6c 0x6f 0x20 0x77 0x6f 0x72 0x6c 0x64 0x21 0x00
 
+; First method in the file is always an entry point. Name doesn't matter.
 main:
     push 0x00               ; output_index - at the moment 0 is stdout
     push_addr hello_world   ; data_address
     push 0x0d               ; size = 13
     call write
-    itrpt
+    return
 
-; params:
+; Params:
 ;   output_index
 ;   data_address
 ;   size

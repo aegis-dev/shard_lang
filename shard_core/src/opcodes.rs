@@ -22,17 +22,16 @@ use num_enum::TryFromPrimitive;
 #[repr(u8)]
 #[derive(Debug, Copy, Clone, Eq, PartialEq, TryFromPrimitive)]
 pub enum Opcode {
-    Interrupt = 0x00,
-    Return = 0x01,
-    Call = 0x02,
-    Jump = 0x03,
-    JumpC = 0x04,
-    Push = 0x05,
-    PushAddr = 0x06,
-    Pop = 0x07,
-    Label = 0x08, // pseudo opcode / jump target
-    Nop = 0x09,
-    Sys = 0x0a,
+    Return = 0x00,
+    Call = 0x01,
+    Jump = 0x02,
+    JumpC = 0x03,
+    Push = 0x04,
+    PushAddr = 0x05,
+    Pop = 0x06,
+    Label = 0x07, // pseudo opcode / jump target
+    Nop = 0x08,
+    Sys = 0x09,
     StackGet = 0x10,
     StackSet = 0x11,
     RegMsbGet = 0x12,
@@ -80,7 +79,6 @@ pub enum Opcode {
 impl Opcode {
     pub fn from_string(value: &str) -> Option<Opcode> {
         return match value {
-            "itrpt" => Some(Opcode::Interrupt),
             "return" => Some(Opcode::Return),
             "call" => Some(Opcode::Call),
             "jump" => Some(Opcode::Jump),
@@ -139,7 +137,6 @@ impl Opcode {
 
     pub fn to_string(&self) ->  &'static str {
         return match self {
-            Opcode::Interrupt => "itrpt",
             Opcode::Return => "return",
             Opcode::Call => "call",
             Opcode::Jump => "jump",
@@ -200,7 +197,6 @@ impl Opcode {
         return match opcode {
             Opcode::Nop => true,
             Opcode::Return => true,
-            Opcode::Interrupt => true,
             Opcode::Sys => true,
             Opcode::JumpC => true,
             Opcode::Pop => true,
