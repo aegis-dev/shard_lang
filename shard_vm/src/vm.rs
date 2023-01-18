@@ -33,8 +33,8 @@ pub struct VM {
     sp: u8,
     csp: u8,
     pc: u16,
-    rmb: u8,
-    rlb: u8,
+    reg_a: u8,
+    reg_b: u8,
 }
 
 pub enum ExecutionStatus {
@@ -46,11 +46,11 @@ pub enum ExecutionStatus {
 impl VM {
     pub fn new(code: Vec<u8>) -> Result<VM, String> {
         let memory = Box::new(DefaultMemory::new(code)?);
-        Ok(VM { sp: 0xff, csp: 0xff, pc: 0x00, rmb: 0x00, rlb: 0x00, memory })
+        Ok(VM { sp: 0xff, csp: 0xff, pc: 0x00, reg_a: 0x00, reg_b: 0x00, memory })
     }
 
     pub fn new_with_custom_memory(memory: Box<dyn Memory>) -> VM {
-        VM { sp: 0xff, csp: 0xff, pc: 0x00, rmb: 0x00, rlb: 0x00, memory }
+        VM { sp: 0xff, csp: 0xff, pc: 0x00, reg_a: 0x00, reg_b: 0x00, memory }
     }
 
     pub fn peek_memory(&self, address: u16) -> Result<u8, String> {
@@ -69,20 +69,20 @@ impl VM {
         self.memory.as_mut()
     }
 
-    pub fn get_rlb(&self) -> u8 {
-        self.rlb
+    pub fn get_reg_a(&self) -> u8 {
+        self.reg_a
     }
 
-    pub fn get_rmb(&self) -> u8 {
-        self.rmb
+    pub fn get_reg_b(&self) -> u8 {
+        self.reg_b
     }
 
     pub fn reset(&mut self) {
         self.sp = 0xff;
         self.csp = 0xff;
         self.pc = 0x00;
-        self.rmb = 0x00;
-        self.rlb = 0x00;
+        self.reg_a = 0x00;
+        self.reg_b = 0x00;
     }
 
     pub fn execute(&mut self, sys_call_handler: fn(&mut VM)) -> Result<(), String> {
@@ -382,19 +382,19 @@ impl VM {
                 let lhs = self.stack_pop()?;
                 self.stack_push(lhs.rotate_right(rhs as u32))?;
             }
-            Opcode::RegMsbGet => {
-                self.stack_push(self.rmb)?;
+            Opcode::GetRegA => {
+                self.stack_push(self.reg_a)?;
             }
-            Opcode::RegLsbGet => {
-                self.stack_push(self.rlb)?;
+            Opcode::GetRegB => {
+                self.stack_push(self.reg_b)?;
             }
-            Opcode::RegMsbSet => {
+            Opcode::SetRegA => {
                 let value = self.stack_pop()?;
-                self.rmb = value;
+                self.reg_a = value;
             }
-            Opcode::RegLsbSet => {
+            Opcode::SetRegB => {
                 let value = self.stack_pop()?;
-                self.rlb = value;
+                self.reg_b = value;
             }
             _ => {
                 return Err(String::from("Opcode has no implementation"));
