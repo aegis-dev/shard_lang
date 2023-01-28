@@ -17,9 +17,10 @@
 // along with shard_lang. If not, see <https://www.gnu.org/licenses/>.
 //
 
-use crate::vm::VM;
+use crate::vm::{VM, InterruptType};
 
-fn sys_call_handler(_vm: &mut VM) {}
+
+fn interrupt_handler(_vm: &mut VM, _interrupt_type: InterruptType) {}
 
 #[test]
 fn execution_tests() {
@@ -27,7 +28,7 @@ fn execution_tests() {
         let code = shard_compiler::compile_from_asm(vec![String::from("  nop")]).unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
     }
@@ -43,7 +44,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -60,7 +61,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -77,7 +78,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -97,7 +98,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -121,7 +122,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -140,7 +141,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -160,7 +161,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -180,7 +181,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -200,7 +201,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -220,7 +221,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -240,7 +241,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -260,7 +261,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -280,7 +281,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -300,7 +301,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -320,7 +321,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -340,7 +341,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -360,7 +361,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -380,7 +381,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -400,7 +401,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -420,7 +421,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -440,7 +441,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -460,7 +461,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -482,7 +483,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -502,7 +503,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -522,7 +523,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -542,7 +543,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -562,7 +563,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -579,7 +580,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -596,7 +597,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -613,7 +614,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -630,7 +631,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -647,7 +648,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -664,7 +665,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -681,7 +682,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -698,7 +699,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -714,7 +715,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -731,7 +732,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -748,7 +749,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -765,7 +766,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -782,7 +783,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -799,7 +800,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -816,7 +817,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -833,7 +834,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 
@@ -850,7 +851,7 @@ fn execution_tests() {
         .unwrap();
 
         let mut vm = VM::new(code).unwrap();
-        if let Err(err) = vm.execute(sys_call_handler) {
+        if let Err(err) = vm.execute(interrupt_handler) {
             println!("Error: {}", err);
         }
 

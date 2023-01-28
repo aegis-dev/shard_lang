@@ -17,11 +17,12 @@
 // along with shard_lang. If not, see <https://www.gnu.org/licenses/>.
 //
 
-mod syscalls;
+mod interrupts;
 
 use std::{env, path::Path, fs::File, io::{BufReader, Read}};
 
 use shard_vm::vm::VM;
+
 
 fn print_help() {
     println!("shardclr [binary_image_path]\nExample: shardclr image.bin");
@@ -52,7 +53,7 @@ fn main() {
 
     let mut vm = VM::new(binary_image).unwrap();
 
-    if let Err(err) = vm.execute(syscalls::syscall_handler) {
+    if let Err(err) = vm.execute(interrupts::interrupt_handler) {
         println!("shardclr error:\n{}", err);
     };
 }

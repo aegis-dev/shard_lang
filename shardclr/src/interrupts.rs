@@ -19,16 +19,24 @@
 
 use num_enum::TryFromPrimitive;
 use std::convert::TryFrom;
-use shard_vm::vm::VM;
+use shard_vm::vm::{VM, InterruptType};
+
+
+pub fn interrupt_handler(vm: &mut VM, interrupt_type: InterruptType) {
+    match interrupt_type {
+        InterruptType::SysCall => syscall_handler(vm),
+        InterruptType::Breakpoint => { },
+    }
+}
 
 #[repr(u8)]
 #[derive(Debug, Copy, Clone, Eq, PartialEq, TryFromPrimitive)]
-pub enum Syscall {
+enum Syscall {
     Read = 0x00,
     Write = 0x01,
 }
 
-pub fn syscall_handler(vm: &mut VM) {
+fn syscall_handler(vm: &mut VM) {
     let syscall_id = vm.stack_pop().unwrap();
     let syscall = Syscall::try_from(syscall_id).unwrap();
 

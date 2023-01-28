@@ -17,9 +17,10 @@
 // along with shard_lang. If not, see <https://www.gnu.org/licenses/>.
 //
 
-use std::convert::TryFrom;
+use std::{convert::TryFrom, collections::HashSet};
 use shard_core::opcodes::Opcode;
 use crate::memory::{Memory, DefaultMemory};
+
 
 pub const VM_ADDRESS_SIZE: usize = 2;
 pub const VM_OPERAND_SIZE: usize = 1;
@@ -35,22 +36,29 @@ pub struct VM {
     pc: u16,
     reg_a: u8,
     reg_b: u8,
+    breakpoints: HashSet<u16>,
 }
 
 pub enum ExecutionStatus {
     Continue,
     SysCall,
-    Done
+    Breakpoint,
+    Done,
+}
+
+pub enum InterruptType {
+    SysCall,
+    Breakpoint,
 }
 
 impl VM {
     pub fn new(code: Vec<u8>) -> Result<VM, String> {
         let memory = Box::new(DefaultMemory::new(code)?);
-        Ok(VM { sp: 0xff, csp: 0xff, pc: 0x00, reg_a: 0x00, reg_b: 0x00, memory })
+        Ok(VM { sp: 0xff, csp: 0xff, pc: 0x00, reg_a: 0x00, reg_b: 0x00, memory, breakpoints: HashSet::new() })
     }
 
     pub fn new_with_custom_memory(memory: Box<dyn Memory>) -> VM {
-        VM { sp: 0xff, csp: 0xff, pc: 0x00, reg_a: 0x00, reg_b: 0x00, memory }
+        VM { sp: 0xff, csp: 0xff, pc: 0x00, reg_a: 0x00, reg_b: 0x00, memory, breakpoints: HashSet::new() }
     }
 
     pub fn peek_memory(&self, address: u16) -> Result<u8, String> {
@@ -85,18 +93,33 @@ impl VM {
         self.reg_b = 0x00;
     }
 
-    pub fn execute(&mut self, sys_call_handler: fn(&mut VM)) -> Result<(), String> {
-        self.reset();
-        self.continue_execution(sys_call_handler)
+    pub fn set_breakpoint(&mut self, address: u16) {
+        self.breakpoints.insert(address);
     }
 
-    pub fn continue_execution(&mut self, sys_call_handler: fn(&mut VM)) -> Result<(), String> {
+    pub fn remove_breakpoint(&mut self, address: u16) -> bool {
+        self.breakpoints.remove(&address)
+    }
+
+    pub fn clear_breakpoints(&mut self) {
+        self.breakpoints.clear();
+    }
+
+    pub fn execute(&mut self, interrupt_handler: fn(&mut VM, InterruptType)) -> Result<(), String> {
+        self.reset();
+        self.continue_execution(interrupt_handler)
+    }
+
+    pub fn continue_execution(&mut self, interrupt_handler: fn(&mut VM, InterruptType)) -> Result<(), String> {
         loop {
             match self.execute_instruction()? {
                 ExecutionStatus::Continue => continue,
                 ExecutionStatus::Done => return Ok(()),
                 ExecutionStatus::SysCall => {
-                    sys_call_handler(self);
+                    interrupt_handler(self, InterruptType::SysCall);
+                },
+                ExecutionStatus::Breakpoint => {
+                    interrupt_handler(self, InterruptType::Breakpoint);
                 }
             }
         }
@@ -399,6 +422,10 @@ impl VM {
             _ => {
                 return Err(String::from("Opcode has no implementation"));
             }
+        }
+
+        if self.breakpoints.contains(&self.pc) {
+            return Ok(ExecutionStatus::Breakpoint);
         }
 
         Ok(ExecutionStatus::Continue)
