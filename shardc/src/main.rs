@@ -143,6 +143,8 @@ pub fn load_module_from_string(module_string: &String, module_name: &String, cur
 fn preprocess_source(asm_source: &mut Vec<String>, current_module_dir: &String, included_modules: &mut HashSet<String>, standard_modules: &HashMap<String, String>) -> Result<(), String> {
     let mut sources_to_add = vec![];
 
+    let mut lines_to_remove = vec![];
+
     for line_number in 0..asm_source.len() {
         let mut line = asm_source[line_number].clone();
 
@@ -177,7 +179,13 @@ fn preprocess_source(asm_source: &mut Vec<String>, current_module_dir: &String, 
                     sources_to_add.push(load_module_from_string(sys_module_source, &module_name, &mock_sys_dir, included_modules, standard_modules)?);
                 }
             }
+
+            lines_to_remove.insert(0, line_number);
         }
+    }
+
+    for line_number in lines_to_remove {
+        asm_source.remove(line_number);
     }
 
     for source_to_add in sources_to_add {
