@@ -185,7 +185,7 @@ fn preprocess_source(asm_source: &mut Vec<String>, current_module_dir: &String, 
     }
 
     for line_number in lines_to_remove {
-        asm_source.remove(line_number);
+        asm_source[line_number] = String::from("");
     }
 
     for source_to_add in sources_to_add {
